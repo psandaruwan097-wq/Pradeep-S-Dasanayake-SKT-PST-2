@@ -1,0 +1,1522 @@
+
+# Let's create the complete HTML file for the gamified student performance dashboard
+# and save it to the output directory
+
+html_content = '''<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ප්‍රදීප් එස් දසනායක - සිසු ප්‍රතිඵල පුවරුව</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;600;700;900&family=Noto+Serif+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f0d878;
+            --gold-dark: #8b7500;
+            --maroon: #5c0011;
+            --maroon-light: #8b1a2b;
+            --dark-bg: #1a0a0a;
+            --card-bg: rgba(30, 15, 15, 0.92);
+            --text-primary: #f5e6c8;
+            --text-secondary: #c9b896;
+            --border-glow: rgba(212, 175, 55, 0.3);
+            --hanuma: #8b4513;
+            --bhima: #4682b4;
+            --ashok: #2e8b57;
+            --arjun: #9932cc;
+            --ravana: #b22222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Sinhala', 'Noto Serif Sinhala', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Overlay */
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                linear-gradient(135deg, rgba(26,10,10,0.97) 0%, rgba(60,20,20,0.85) 50%, rgba(26,10,10,0.97) 100%),
+                url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920&q=80') center/cover no-repeat;
+        }
+
+        .hero-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+        }
+
+        /* Sanskrit Welcome */
+        .welcome-section {
+            text-align: center;
+            padding: 40px 20px 20px;
+            position: relative;
+        }
+
+        .welcome-sanskrit {
+            font-family: 'Noto Serif Sinhala', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        .welcome-name {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-top: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2); }
+            50% { text-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3); }
+        }
+
+        /* Decorative Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .divider-icon {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        /* Download Section */
+        .download-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, rgba(92, 0, 17, 0.6), rgba(30, 15, 15, 0.8));
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .download-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .download-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--dark-bg);
+            flex-shrink: 0;
+        }
+
+        .download-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: var(--gold-light);
+        }
+
+        .download-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--gold);
+            color: var(--dark-bg);
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Subject Tabs */
+        .subject-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .subject-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px 30px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .subject-tab.active {
+            color: var(--gold);
+        }
+
+        .subject-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .subject-tab:hover {
+            color: var(--gold-light);
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, rgba(92, 0, 17, 0.8), rgba(60, 20, 20, 0.8));
+            color: var(--gold);
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 2px solid var(--gold-dark);
+        }
+
+        .leaderboard-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .leaderboard-table tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #333; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #333; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #b87333); color: #fff; }
+        .rank-other { background: rgba(212, 175, 55, 0.15); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+
+        .student-name-cell {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--maroon), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--gold-light);
+            flex-shrink: 0;
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .level-hanuma { background: rgba(139, 69, 19, 0.25); color: #d4a574; border: 1px solid rgba(139, 69, 19, 0.4); }
+        .level-bhima { background: rgba(70, 130, 180, 0.25); color: #87ceeb; border: 1px solid rgba(70, 130, 180, 0.4); }
+        .level-ashok { background: rgba(46, 139, 87, 0.25); color: #90ee90; border: 1px solid rgba(46, 139, 87, 0.4); }
+        .level-arjun { background: rgba(153, 50, 204, 0.25); color: #dda0dd; border: 1px solid rgba(153, 50, 204, 0.4); }
+        .level-ravana { background: linear-gradient(135deg, rgba(178, 34, 34, 0.3), rgba(139, 0, 0, 0.3)); color: #ff6b6b; border: 1px solid rgba(178, 34, 34, 0.5); box-shadow: 0 0 10px rgba(178, 34, 34, 0.2); }
+
+        .marks-display {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .marks-high { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.3); }
+        .marks-mid { color: var(--gold-light); }
+        .marks-low { color: var(--text-secondary); }
+
+        .celebrate-btn {
+            background: linear-gradient(135deg, var(--ravana), var(--maroon));
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .celebrate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(178, 34, 34, 0.4);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 15px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e0f0f, #2a1515);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            color: #fff;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .modal-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--maroon), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold-light);
+            margin: 0 auto 15px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .modal-name {
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .modal-level {
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .progress-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .weekly-chart-container {
+            height: 250px;
+            margin-top: 15px;
+        }
+
+        /* Legend */
+        .legend-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .legend-info h4 {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .legend-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .leaderboard-table {
+                font-size: 0.85rem;
+            }
+            
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 10px 8px;
+            }
+            
+            .student-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            margin-top: 20px;
+        }
+
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">දත්ත ලබා ගනිමින්...</div>
+    </div>
+
+    <!-- Background -->
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <div class="welcome-sanskrit">स्वागतम्</div>
+        <div class="welcome-name">ප්‍රදීප් එස් දසනායක</div>
+        <div class="welcome-subtitle">සිසු ප්‍රතිඵල කළමනාකරණ පද්ධතිය</div>
+        
+        <div class="divider">
+            <div class="divider-line"></div>
+            <i class="fas fa-om divider-icon"></i>
+            <div class="divider-line"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Download Section -->
+        <div class="download-section fade-in">
+            <h2 class="section-title">
+                <i class="fas fa-download"></i>
+                PDF හා Tute බාගත කිරීම
+            </h2>
+            <div class="download-grid">
+                <a href="#" class="download-card" onclick="alert('සංස්කෘත PDF බාගත කිරීම ඉදිරියේදී ලබා ගත හැක'); return false;">
+                    <div class="download-icon"><i class="fas fa-book"></i></div>
+                    <div class="download-info">
+                        <h4>සංස්කෘත - පාඩම් පිටු</h4>
+                        <p>සියලුම පාඩම් PDF එකතුව</p>
+                    </div>
+                </a>
+                <a href="#" class="download-card" onclick="alert('සංස්කෘත Tute බාගත කිරීම ඉදිරියේදී ලබා ගත හැක'); return false;">
+                    <div class="download-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="download-info">
+                        <h4>සංස්කෘත - Tute</h4>
+                        <p>සියලුම Tute එකතුව</p>
+                    </div>
+                </a>
+                <a href="#" class="download-card" onclick="alert('පාලි PDF බාගත කිරීම ඉදිරියේදී ලබා ගත හැක'); return false;">
+                    <div class="download-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="download-info">
+                        <h4>පාලි - පාඩම් පිටු</h4>
+                        <p>සියලුම පාඩම් PDF එකතුව</p>
+                    </div>
+                </a>
+                <a href="#" class="download-card" onclick="alert('පාලි Tute බාගත කිරීම ඉදිරියේදී ලබා ගත හැක'); return false;">
+                    <div class="download-icon"><i class="fas fa-scroll"></i></div>
+                    <div class="download-info">
+                        <h4>පාලි - Tute</h4>
+                        <p>සියලුම Tute එකතුව</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-section fade-in">
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                ශ්‍රේණි මට්ටම් (Rank Levels)
+            </h2>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--hanuma);"></div>
+                    <div class="legend-info">
+                        <h4>හනුමා (Hanuma)</h4>
+                        <p>35 ට අඩු - ආරම්භක මට්ටම</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--bhima);"></div>
+                    <div class="legend-info">
+                        <h4>භීම (Bhima)</h4>
+                        <p>35 - 54 - සාමාන්‍ය මට්ටම</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--ashok);"></div>
+                    <div class="legend-info">
+                        <h4>අශෝඛ (Ashok)</h4>
+                        <p>55 - 64 - දක්ෂ මට්ටම</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--arjun);"></div>
+                    <div class="legend-info">
+                        <h4>අර්ජුන් (Arjun)</h4>
+                        <p>65 - 74 - ඉතා දක්ෂ මට්ටම</p>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--ravana);"></div>
+                    <div class="legend-info">
+                        <h4>ශ්‍රී රාවණා (Sri Ravana)</h4>
+                        <p>75+ - ප්‍රවීණ මට්ටම</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalStudents">0</div>
+                <div class="stat-label">සම්පූර්ණ සිසුන්</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgMarks">0</div>
+                <div class="stat-label">සාමාන්‍ය ලකුණු</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="topRavana">0</div>
+                <div class="stat-label">ශ්‍රී රාවණා ශ්‍රේණි</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="highestMarks">0</div>
+                <div class="stat-label">ඉහළම ලකුණු</div>
+            </div>
+        </div>
+
+        <!-- Subject Tabs -->
+        <div class="subject-tabs">
+            <button class="subject-tab active" onclick="switchSubject('sanskrit')">සංස්කෘත (Sanskrit)</button>
+            <button class="subject-tab" onclick="switchSubject('pali')">පාලි (Pali)</button>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-section">
+            <span style="color: var(--text-secondary); font-size: 0.95rem;">මාසය:</span>
+            <button class="filter-btn active" onclick="filterByMonth('all', this)">සියලු</button>
+            <button class="filter-btn" onclick="filterByMonth('january', this)">ජනවාරි</button>
+            <button class="filter-btn" onclick="filterByMonth('february', this)">පෙබරවාරි</button>
+            <button class="filter-btn" onclick="filterByMonth('march', this)">මාර්තු</button>
+            <button class="filter-btn" onclick="filterByMonth('april', this)">අප්‍රේල්</button>
+            <button class="filter-btn" onclick="filterByMonth('may', this)">මැයි</button>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section fade-in" id="leaderboardSection">
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                <span id="leaderboardTitle">සංස්කෘත - නායක පුවරුව</span>
+            </h2>
+            <div style="overflow-x: auto;">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>ශ්‍රේණිය</th>
+                            <th>සිසුවා</th>
+                            <th>ලකුණු</th>
+                            <th>ශ්‍රේණි මට්ටම</th>
+                            <th>ක්‍රියා</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+            <div class="chart-card fade-in">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-pie"></i>
+                    ශ්‍රේණි ව්‍යාප්තිය
+                </h2>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card fade-in">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    විෂය ලකුණු සංසන්දනය
+                </h2>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <div class="modal-avatar" id="modalAvatar">A</div>
+                <div class="modal-name" id="modalName">සිසුවාගේ නම</div>
+                <div class="modal-level" id="modalLevel">
+                    <span class="level-badge level-ravana">ශ්‍රී රාවණා</span>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <h3 style="color: var(--gold); margin-bottom: 10px; font-size: 1.1rem;">
+                    <i class="fas fa-bullseye"></i> ශ්‍රී රාවණා මට්ටමට ප්‍රගතිය
+                </h3>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%; background: linear-gradient(90deg, var(--gold-dark), var(--gold));"></div>
+                </div>
+                <div class="progress-info">
+                    <span id="currentMarks">වත්මන්: 0</span>
+                    <span id="neededMarks">අවශ්‍ය: 75</span>
+                </div>
+                <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;" id="progressText">
+                    ශ්‍රී රාවණා මට්ටමට තව ලකුණු 75 අවශ්‍යයි
+                </p>
+            </div>
+
+            <div style="margin-top: 25px;">
+                <h3 style="color: var(--gold); margin-bottom: 15px; font-size: 1.1rem;">
+                    <i class="fas fa-calendar-week"></i> සතිපතා ප්‍රතිඵල
+                </h3>
+                <div class="weekly-chart-container">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;" id="celebrateSection">
+                <button class="celebrate-btn" onclick="triggerCelebration()">
+                    <i class="fas fa-fire"></i>
+                    ජයග්‍රහණය සමරමු!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><i class="fas fa-om"></i> ප්‍රදීප් එස් දසනායක - සිසු ප්‍රතිඵල කළමනාකරණ පද්ධතිය <i class="fas fa-om"></i></p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">Powered by Google Sheets API</p>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - Google Sheets Setup
+        // ============================================
+        
+        /*
+        GOOGLE SHEETS SETUP INSTRUCTIONS:
+        ================================
+        
+        1. Create a Google Sheet with the following columns:
+           A: name (සිසුවාගේ නම)
+           B: subject (විෂය: "sanskrit" හෝ "pali")
+           C: marks (ලකුණු)
+           D: month (මාසය: january, february, march, april, may, etc.)
+           E: week1 (සති 1 ලකුණු)
+           F: week2 (සති 2 ලකුණු)
+           G: week3 (සති 3 ලකුණු)
+           H: week4 (සති 4 ලකුණු)
+        
+        2. Publish the sheet:
+           - File → Share → Publish to web
+           - Select the sheet and publish as CSV
+           - Copy the published URL
+        
+        3. Convert to JSON using a service like:
+           https://api.allorigins.win/raw?url=YOUR_CSV_URL
+           OR use a Google Apps Script web app
+        
+        4. Replace the SHEET_URL below with your actual URL
+        */
+        
+        const SHEET_URL = 'YOUR_GOOGLE_SHEET_JSON_URL_HERE';
+        
+        // ============================================
+        // DEMO DATA (Replace with actual sheet data)
+        // ============================================
+        
+        const demoData = [
+            // Sanskrit Students
+            { name: "කසුන් එස්", subject: "sanskrit", marks: 82, month: "january", week1: 65, week2: 70, week3: 78, week4: 82 },
+            { name: "නිමේෂ් ආර්", subject: "sanskrit", marks: 76, month: "january", week1: 60, week2: 68, week3: 72, week4: 76 },
+            { name: "සඳුන් පී", subject: "sanskrit", marks: 71, month: "january", week1: 55, week2: 62, week3: 68, week4: 71 },
+            { name: "චමින්ද එම්", subject: "sanskrit", marks: 68, month: "january", week1: 50, week2: 58, week3: 64, week4: 68 },
+            { name: "රුවන් ඩී", subject: "sanskrit", marks: 62, month: "january", week1: 45, week2: 52, week3: 58, week4: 62 },
+            { name: "අමිල එස්", subject: "sanskrit", marks: 58, month: "january", week1: 40, week2: 48, week3: 54, week4: 58 },
+            { name: "තරිඳු බී", subject: "sanskrit", marks: 48, month: "january", week1: 30, week2: 38, week3: 44, week4: 48 },
+            { name: "සදරුවන් එල්", subject: "sanskrit", marks: 42, month: "january", week1: 25, week2: 32, week3: 38, week4: 42 },
+            { name: "නවෝද් එස්", subject: "sanskrit", marks: 32, month: "january", week1: 15, week2: 22, week3: 28, week4: 32 },
+            { name: "සංජය ආර්", subject: "sanskrit", marks: 28, month: "january", week1: 10, week2: 18, week3: 24, week4: 28 },
+            
+            // Pali Students
+            { name: "කසුන් එස්", subject: "pali", marks: 78, month: "january", week1: 60, week2: 66, week3: 72, week4: 78 },
+            { name: "නිමේෂ් ආර්", subject: "pali", marks: 72, month: "january", week1: 55, week2: 62, week3: 68, week4: 72 },
+            { name: "සඳුන් පී", subject: "pali", marks: 65, month: "january", week1: 48, week2: 55, week3: 60, week4: 65 },
+            { name: "චමින්ද එම්", subject: "pali", marks: 58, month: "january", week1: 42, week2: 48, week3: 54, week4: 58 },
+            { name: "රුවන් ඩී", subject: "pali", marks: 52, month: "january", week1: 35, week2: 42, week3: 48, week4: 52 },
+            { name: "අමිල එස්", subject: "pali", marks: 45, month: "january", week1: 28, week2: 35, week3: 40, week4: 45 },
+            { name: "තරිඳු බී", subject: "pali", marks: 38, month: "january", week1: 20, week2: 28, week3: 34, week4: 38 },
+            { name: "සදරුවන් එල්", subject: "pali", marks: 35, month: "january", week1: 18, week2: 25, week3: 30, week4: 35 },
+            { name: "නවෝද් එස්", subject: "pali", marks: 25, month: "january", week1: 10, week2: 15, week3: 20, week4: 25 },
+            { name: "සංජය ආර්", subject: "pali", marks: 22, month: "january", week1: 8, week2: 12, week3: 18, week4: 22 },
+        ];
+
+        // ============================================
+        // STATE
+        // ============================================
+        
+        let currentSubject = 'sanskrit';
+        let currentMonth = 'all';
+        let allData = [];
+        let selectedStudent = null;
+        let pieChartInstance = null;
+        let barChartInstance = null;
+        let weeklyChartInstance = null;
+
+        // ============================================
+        // LEVEL SYSTEM
+        // ============================================
+        
+        function getLevel(marks) {
+            if (marks < 35) return { name: 'හනුමා', class: 'level-hanuma', color: '#d4a574' };
+            if (marks < 55) return { name: 'භීම', class: 'level-bhima', color: '#87ceeb' };
+            if (marks < 65) return { name: 'අශෝඛ', class: 'level-ashok', color: '#90ee90' };
+            if (marks < 75) return { name: 'අර්ජුන්', class: 'level-arjun', color: '#dda0dd' };
+            return { name: 'ශ්‍රී රාවණා', class: 'level-ravana', color: '#ff6b6b' };
+        }
+
+        function getMarksClass(marks) {
+            if (marks >= 75) return 'marks-high';
+            if (marks >= 55) return 'marks-mid';
+            return 'marks-low';
+        }
+
+        // ============================================
+        // DATA FETCHING
+        // ============================================
+        
+        async function fetchData() {
+            try {
+                // Try to fetch from Google Sheet
+                if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_SHEET_JSON_URL_HERE') {
+                    const response = await fetch(SHEET_URL);
+                    const data = await response.json();
+                    allData = data;
+                } else {
+                    // Use demo data
+                    allData = demoData;
+                }
+            } catch (error) {
+                console.log('Using demo data:', error);
+                allData = demoData;
+            }
+            
+            document.getElementById('loadingOverlay').style.display = 'none';
+            updateDashboard();
+        }
+
+        // ============================================
+        // DASHBOARD UPDATES
+        // ============================================
+        
+        function updateDashboard() {
+            updateStats();
+            updateLeaderboard();
+            updatePieChart();
+            updateBarChart();
+        }
+
+        function updateStats() {
+            const filtered = getFilteredData();
+            const total = filtered.length;
+            const avg = total > 0 ? (filtered.reduce((sum, s) => sum + s.marks, 0) / total).toFixed(1) : 0;
+            const ravanaCount = filtered.filter(s => s.marks >= 75).length;
+            const highest = total > 0 ? Math.max(...filtered.map(s => s.marks)) : 0;
+
+            animateNumber('totalStudents', total);
+            animateNumber('avgMarks', avg);
+            animateNumber('topRavana', ravanaCount);
+            animateNumber('highestMarks', highest);
+        }
+
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            const duration = 1000;
+            const start = 0;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const current = start + (target - start) * easeProgress;
+                
+                el.textContent = Number.isInteger(target) ? Math.round(current) : current.toFixed(1);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function getFilteredData() {
+            return allData.filter(s => {
+                const subjectMatch = s.subject === currentSubject;
+                const monthMatch = currentMonth === 'all' || s.month === currentMonth;
+                return subjectMatch && monthMatch;
+            }).sort((a, b) => b.marks - a.marks);
+        }
+
+        // ============================================
+        // LEADERBOARD
+        // ============================================
+        
+        function updateLeaderboard() {
+            const data = getFilteredData();
+            const tbody = document.getElementById('leaderboardBody');
+            const title = document.getElementById('leaderboardTitle');
+            
+            title.textContent = currentSubject === 'sanskrit' ? 'සංස්කෘත - නායක පුවරුව' : 'පාලි - නායක පුවරුව';
+            
+            tbody.innerHTML = data.map((student, index) => {
+                const rank = index + 1;
+                const level = getLevel(student.marks);
+                const marksClass = getMarksClass(student.marks);
+                const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+                const initials = student.name.split(' ').map(n => n[0]).join('');
+                
+                return `
+                    <tr onclick="openStudentModal('${student.name}', '${student.subject}')">
+                        <td><span class="rank-badge ${rankClass}">${rank}</span></td>
+                        <td>
+                            <div class="student-name-cell">
+                                <div class="student-avatar">${initials}</div>
+                                ${student.name}
+                            </div>
+                        </td>
+                        <td class="marks-display ${marksClass}">${student.marks}</td>
+                        <td><span class="level-badge ${level.class}">${level.name}</span></td>
+                        <td>
+                            ${student.marks >= 75 ? 
+                                `<button class="celebrate-btn" onclick="event.stopPropagation(); triggerCelebrationFromLeaderboard('${student.name}')">
+                                    <i class="fas fa-fire"></i> සමරමු
+                                </button>` : 
+                                '<span style="color: var(--text-secondary); font-size: 0.85rem;">-</span>'
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // SUBJECT SWITCHING
+        // ============================================
+        
+        function switchSubject(subject) {
+            currentSubject = subject;
+            document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            updateDashboard();
+        }
+
+        // ============================================
+        // MONTH FILTER
+        // ============================================
+        
+        function filterByMonth(month, btn) {
+            currentMonth = month;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateDashboard();
+        }
+
+        // ============================================
+        // PIE CHART
+        // ============================================
+        
+        function updatePieChart() {
+            const data = getFilteredData();
+            const levels = { hanuma: 0, bhima: 0, ashok: 0, arjun: 0, ravana: 0 };
+            
+            data.forEach(s => {
+                if (s.marks < 35) levels.hanuma++;
+                else if (s.marks < 55) levels.bhima++;
+                else if (s.marks < 65) levels.ashok++;
+                else if (s.marks < 75) levels.arjun++;
+                else levels.ravana++;
+            });
+
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            
+            if (pieChartInstance) pieChartInstance.destroy();
+            
+            pieChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['හනුමා (<35)', 'භීම (35-54)', 'අශෝඛ (55-64)', 'අර්ජුන් (65-74)', 'ශ්‍රී රාවණා (75+)'],
+                    datasets: [{
+                        data: [levels.hanuma, levels.bhima, levels.ashok, levels.arjun, levels.ravana],
+                        backgroundColor: ['#8b4513', '#4682b4', '#2e8b57', '#9932cc', '#b22222'],
+                        borderColor: '#1a0a0a',
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f5e6c8',
+                                font: { family: 'Noto Sans Sinhala', size: 12 },
+                                padding: 15
+                            }
+                        }
+                    },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+        }
+
+        // ============================================
+        // BAR CHART
+        // ============================================
+        
+        function updateBarChart() {
+            const sanskritData = allData.filter(s => s.subject === 'sanskrit').sort((a, b) => b.marks - a.marks);
+            const paliData = allData.filter(s => s.subject === 'pali').sort((a, b) => b.marks - a.marks);
+            
+            const names = [...new Set(allData.map(s => s.name))];
+            const sanskritMarks = names.map(name => {
+                const s = sanskritData.find(st => st.name === name);
+                return s ? s.marks : 0;
+            });
+            const paliMarks = names.map(name => {
+                const s = paliData.find(st => st.name === name);
+                return s ? s.marks : 0;
+            });
+
+            const ctx = document.getElementById('barChart').getContext('2d');
+            
+            if (barChartInstance) barChartInstance.destroy();
+            
+            barChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: names,
+                    datasets: [
+                        {
+                            label: 'සංස්කෘත',
+                            data: sanskritMarks,
+                            backgroundColor: 'rgba(212, 175, 55, 0.7)',
+                            borderColor: '#d4af37',
+                            borderWidth: 1,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'පාලි',
+                            data: paliMarks,
+                            backgroundColor: 'rgba(139, 0, 0, 0.7)',
+                            borderColor: '#8b0000',
+                            borderWidth: 1,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f5e6c8', font: { family: 'Noto Sans Sinhala' } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#c9b896' },
+                            grid: { color: 'rgba(212, 175, 55, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#c9b896', font: { family: 'Noto Sans Sinhala', size: 11 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // STUDENT MODAL
+        // ============================================
+        
+        function openStudentModal(name, subject) {
+            const student = allData.find(s => s.name === name && s.subject === subject);
+            if (!student) return;
+            
+            selectedStudent = student;
+            
+            document.getElementById('modalName').textContent = student.name;
+            document.getElementById('modalAvatar').textContent = student.name.split(' ').map(n => n[0]).join('');
+            
+            const level = getLevel(student.marks);
+            document.getElementById('modalLevel').innerHTML = `<span class="level-badge ${level.class}">${level.name}</span>`;
+            
+            // Progress bar
+            const progressPercent = Math.min((student.marks / 75) * 100, 100);
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+            document.getElementById('currentMarks').textContent = `වත්මන්: ${student.marks}`;
+            
+            const needed = Math.max(75 - student.marks, 0);
+            document.getElementById('neededMarks').textContent = `අවශ්‍ය: 75`;
+            
+            if (needed === 0) {
+                document.getElementById('progressText').textContent = 'සුබ පැතුම්! ඔබ ශ්‍රී රාවණා මට්ටමට ළඟා වී ඇත!';
+                document.getElementById('progressText').style.color = '#ff6b6b';
+            } else {
+                document.getElementById('progressText').textContent = `ශ්‍රී රාවණා මට්ටමට තව ලකුණු ${needed} අවශ්‍යයි`;
+                document.getElementById('progressText').style.color = 'var(--text-secondary)';
+            }
+            
+            // Show/hide celebrate button
+            document.getElementById('celebrateSection').style.display = student.marks >= 75 ? 'block' : 'none';
+            
+            // Weekly chart
+            updateWeeklyChart(student);
+            
+            document.getElementById('studentModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('studentModal').classList.remove('active');
+        }
+
+        function updateWeeklyChart(student) {
+            const ctx = document.getElementById('weeklyChart').getContext('2d');
+            
+            if (weeklyChartInstance) weeklyChartInstance.destroy();
+            
+            weeklyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['සති 1', 'සති 2', 'සති 3', 'සති 4'],
+                    datasets: [{
+                        label: 'ලකුණු',
+                        data: [student.week1, student.week2, student.week3, student.week4],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#d4af37',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#c9b896' },
+                            grid: { color: 'rgba(212, 175, 55, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#c9b896', font: { family: 'Noto Sans Sinhala' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // CELEBRATION / FIREWORKS
+        // ============================================
+        
+        function triggerCelebration() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#d4af37', '#ff6b6b', '#ffd700', '#ff4500', '#daa520']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#d4af37', '#ff6b6b', '#ffd700', '#ff4500', '#daa520']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function triggerCelebrationFromLeaderboard(name) {
+            openStudentModal(name, currentSubject);
+            setTimeout(triggerCelebration, 500);
+        }
+
+        // ============================================
+        // MODAL CLOSE ON OUTSIDE CLICK
+        // ============================================
+        
+        document.getElementById('studentModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchData();
+        });
+    </script>
+</body>
+</html>'''
+
+# Save the file
+output_path = '/mnt/agents/output/student_performance_dashboard.html'
+with open(output_path, 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print(f"Dashboard saved to: {output_path}")
+print(f"File size: {len(html_content):,} characters")
